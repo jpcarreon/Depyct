@@ -13,12 +13,7 @@ class MainWindow(QObject):
 
     @Slot(str)
     def openFile(self, fileName):
-        myconfig = r"--psm 6 --oem 3"
-        img = cv2.imread(fileName[8:])
-        text = pytesseract.image_to_string(img, config=myconfig)
-        
-        with open("output.txt", "w", encoding="utf-8") as fp:
-            fp.write(text)
+        self.parseImg(fileName[8:])
 
     @Slot()
     def getClipboard(self):
@@ -31,5 +26,14 @@ class MainWindow(QObject):
             self.signalPaste.emit(False)
             return
         
+        self.parseImg(tempPath)
         os.remove(tempPath)
         
+
+    def parseImg(self, fileName):
+        myconfig = r"--psm 6 --oem 3"
+        img = cv2.imread(fileName)
+        text = pytesseract.image_to_string(img, config=myconfig)
+        
+        with open("output.txt", "w", encoding="utf-8") as fp:
+            fp.write(text)
