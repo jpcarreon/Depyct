@@ -6,31 +6,51 @@ import QtQuick.Dialogs
 
 ApplicationWindow{
     id: window
-    width: 200
+    width: 400
     height: 200
     visible: true
-    title: qsTr("Dashboard")
+    title: qsTr("Depyct")
 
     flags: Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint |Qt.CustomizeWindowHint | Qt.MSWindowsFixedSizeDialogHint | Qt.WindowTitleHint
 
     Material.theme: Material.Dark
     Material.accent: Material.LightBlue
 
-    Button {
-        id: submitButton
-        text: qsTr("Upload Image")
+    Row {
+        id: row
+        width: 210
+        height: 48
+        spacing: 10
+        leftPadding: 20
         anchors.centerIn: parent
-        onClicked: {
-            fileOpen.open()
+        
+        
+
+        Button {
+            id: submitButton
+            text: qsTr("Upload Image")
+            onClicked: {
+                fileOpen.open()
+            }
+
+            FileDialog {
+                id: fileOpen
+                title: "Open Image"
+                nameFilters: ["Image Files (*.png *.jpg)"]
+                onAccepted: {
+                    backend.openFile(fileOpen.currentFile)
+                }
+            }
         }
 
-        FileDialog{
-            id: fileOpen
-            title: "Open Image"
-            nameFilters: ["Image Files (*.png *.jpg)"]
-            onAccepted: {
-                backend.openFile(fileOpen.currentFile)
+        Button {
+            id: clipboardButton
+            text: qsTr("")
+            icon.source: "../Images/content-paste.svg"
+            onClicked: {
+                backend.getClipboard()
             }
+
         }
     }
     

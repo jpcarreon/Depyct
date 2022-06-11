@@ -2,7 +2,9 @@ import pytesseract
 import cv2
 import os
 
+from PIL import ImageGrab
 from PySide6.QtCore import QObject, Slot, Signal
+from PySide6.QtGui import QGuiApplication
 
 class MainWindow(QObject):
     def __init__(self):
@@ -16,4 +18,7 @@ class MainWindow(QObject):
         
         with open("output.txt", "w", encoding="utf-8") as fp:
             fp.write(text)
-        
+
+    @Slot()
+    def getClipboard(self):
+        ImageGrab.grabclipboard().save("./Images/temp.png", "PNG")
