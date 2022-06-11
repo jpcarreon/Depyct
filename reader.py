@@ -15,20 +15,25 @@ class MainWindow(QObject):
 
     @Slot(str)
     def openFile(self, fileName):
-        self.parseImg(fileName[8:])
+        try:
+            self.result += self.parseImg(fileName[8:])
+            self.signalPaste.emit(True)
+        except Exception as e:
+            print(e)
+            self.signalPaste.emit(False)
 
     @Slot()
     def getClipboard(self):
         tempPath = "./Images/temp.png"
         try:
             ImageGrab.grabclipboard().save(tempPath, "PNG")
+            self.result += self.parseImg(tempPath)
             self.signalPaste.emit(True)
-        except:
-            print("Invalid Clipboard Contents!")
+        except Exception as e:
+            print(e)
             self.signalPaste.emit(False)
             return
         
-        self.parseImg(tempPath)
         os.remove(tempPath)
 
     @Slot()
@@ -38,7 +43,6 @@ class MainWindow(QObject):
     def parseImg(self, fileName):
         myconfig = r"--psm 6 --oem 3"
         img = cv2.imread(fileName)
-        text = pytesseract.image_to_string(img, config=myconfig)
-        
-        with open("output.txt", "w", encoding="utf-8") as fp:
-            fp.write(text)
+
+        return pytesseract.image_to_string(img, config=myconfig)
+
