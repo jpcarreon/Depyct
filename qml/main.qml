@@ -16,6 +16,29 @@ ApplicationWindow{
     Material.theme: Material.Dark
     Material.accent: Material.LightBlue
 
+    
+    Rectangle {
+        id: miniAlertRect
+        width: parent.width - 50
+        height: 20
+        radius: 4
+        color: Material.color(Material.Blue)
+
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
+        anchors.topMargin: 10
+
+        Text {
+            id: miniAlertText
+            text: qsTr("Idle")
+            font.pixelSize: 14
+            color: "#ffffff"
+
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
+    }
+    
+
     Column {
         id: column
         anchors.centerIn: parent
@@ -57,6 +80,9 @@ ApplicationWindow{
             id: button
             text: qsTr("Parse Data")
             anchors.horizontalCenter: parent.horizontalCenter
+            onClicked: {
+                backend.printContents()
+            }
             
         }
     }
@@ -70,7 +96,11 @@ ApplicationWindow{
                 var win = component.createObject()
                 win.errorText += "Invalid Clipboard Contents!"
                 win.show()
-                win.requestActivate()
+                miniAlertText.text = "Failed to parse"
+                miniAlertRect.color = "#ff0000"
+            } else {
+                miniAlertText.text = "Input parsed successfully"
+                miniAlertRect.color = Material.color(Material.Blue)
             }
         }
     }

@@ -1,3 +1,4 @@
+from unittest import result
 import pytesseract
 import cv2
 import os
@@ -10,6 +11,7 @@ class MainWindow(QObject):
         QObject.__init__(self)
 
     signalPaste = Signal(bool)
+    result = ""
 
     @Slot(str)
     def openFile(self, fileName):
@@ -28,7 +30,10 @@ class MainWindow(QObject):
         
         self.parseImg(tempPath)
         os.remove(tempPath)
-        
+
+    @Slot()
+    def printContents(self):
+        print(self.result)
 
     def parseImg(self, fileName):
         myconfig = r"--psm 6 --oem 3"
