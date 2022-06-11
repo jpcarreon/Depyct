@@ -4,11 +4,12 @@ import os
 
 from PIL import ImageGrab
 from PySide6.QtCore import QObject, Slot, Signal
-from PySide6.QtGui import QGuiApplication
 
 class MainWindow(QObject):
     def __init__(self):
         QObject.__init__(self)
+
+    signalPaste = Signal(bool)
 
     @Slot(str)
     def openFile(self, fileName):
@@ -21,4 +22,14 @@ class MainWindow(QObject):
 
     @Slot()
     def getClipboard(self):
-        ImageGrab.grabclipboard().save("./Images/temp.png", "PNG")
+        tempPath = "./Images/temp.png"
+        try:
+            ImageGrab.grabclipboard().save(tempPath, "PNG")
+            self.signalPaste.emit(True)
+        except:
+            print("Invalid Clipboard Contents!")
+            self.signalPaste.emit(False)
+            return
+        
+        os.remove(tempPath)
+        

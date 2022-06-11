@@ -16,45 +16,62 @@ ApplicationWindow{
     Material.theme: Material.Dark
     Material.accent: Material.LightBlue
 
-    Row {
-        id: row
-        width: 210
-        height: 48
-        spacing: 10
-        leftPadding: 20
+    Column {
+        id: column
         anchors.centerIn: parent
-        
-        
 
-        Button {
-            id: submitButton
-            text: qsTr("Upload Image")
-            onClicked: {
-                fileOpen.open()
+        Row {
+            id: row
+            height: 48
+            spacing: 10
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Button {
+                id: submitButton
+                text: qsTr("Upload Image")
+                onClicked: {
+                    fileOpen.open()
+                }
+
+                FileDialog {
+                    id: fileOpen
+                    title: "Open Image"
+                    nameFilters: ["Image Files (*.png *.jpg)"]
+                    onAccepted: {
+                        backend.openFile(fileOpen.currentFile)
+                    }
+                }
             }
 
-            FileDialog {
-                id: fileOpen
-                title: "Open Image"
-                nameFilters: ["Image Files (*.png *.jpg)"]
-                onAccepted: {
-                    backend.openFile(fileOpen.currentFile)
+            Button {
+                id: clipboardButton
+                text: qsTr("")
+                icon.source: "../Images/content-paste.svg"
+                onClicked: {
+                    backend.getClipboard()
                 }
             }
         }
 
         Button {
-            id: clipboardButton
-            text: qsTr("")
-            icon.source: "../Images/content-paste.svg"
-            onClicked: {
-                backend.getClipboard()
-            }
-
+            id: button
+            text: qsTr("Parse Data")
+            anchors.horizontalCenter: parent.horizontalCenter
+            
         }
     }
     
     Connections {
         target: backend
+
+        function onSignalPaste(value) {
+            if (!value) {
+                var component = Qt.createComponent("error.qml")
+                var win = component.createObject()
+                win.errorText += "Invalid Clipboard Contents!"
+                win.show()
+                win.requestActivate()
+            }
+        }
     }
 }
