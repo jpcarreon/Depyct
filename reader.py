@@ -1,4 +1,3 @@
-from unittest import result
 import pytesseract
 import cv2
 import os
@@ -40,8 +39,8 @@ class MainWindow(QObject):
     @Slot()
     def printContents(self):
         #   For testing purposes
-        #   self.result += self.parseImg("./Samples/img.png")
-        
+        #self.result += self.parseImg("./Samples/img.png")
+
         if (len(self.result)):
             self.signalOutput.emit(self.result)
 

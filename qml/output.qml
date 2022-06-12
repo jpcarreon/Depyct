@@ -5,8 +5,8 @@ import QtQuick.Controls.Material 2.15
 
 ApplicationWindow{
     id: window
-    width: 400
-    height: 500
+    width: 800
+    height: 600
     visible: true
     modality: Qt.ApplicationModal
     title: qsTr("Output")
@@ -36,12 +36,27 @@ ApplicationWindow{
             }
         }
         
-
-        Button {
-            text: qsTr("Close")
+        Row {
             anchors.horizontalCenter: parent.horizontalCenter
-            onClicked: window.close()
+            spacing: 20
+
+            Button {
+                text: qsTr("Copy")
+                
+                onClicked: {
+                    mainText.selectAll()
+                    mainText.copy()
+                    mainText.deselect()
+                }
+            }
+
+            Button {
+                text: qsTr("Close")
+                onClicked: window.close()
+            }
         }
+
+        
         
     }    
 }
