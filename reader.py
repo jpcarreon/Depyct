@@ -11,6 +11,7 @@ class MainWindow(QObject):
         QObject.__init__(self)
 
     signalPaste = Signal(bool)
+    signalOutput = Signal(str)
     result = ""
 
     @Slot(str)
@@ -38,7 +39,11 @@ class MainWindow(QObject):
 
     @Slot()
     def printContents(self):
-        print(self.result)
+        #   For testing purposes
+        #   self.result += self.parseImg("./Samples/img.png")
+        
+        if (len(self.result)):
+            self.signalOutput.emit(self.result)
 
     def parseImg(self, fileName):
         myconfig = r"--psm 6 --oem 3"

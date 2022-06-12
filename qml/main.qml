@@ -78,7 +78,7 @@ ApplicationWindow{
 
         Button {
             id: button
-            text: qsTr("Parse Data")
+            text: qsTr("Output")
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: {
                 backend.printContents()
@@ -102,6 +102,13 @@ ApplicationWindow{
                 miniAlertText.text = "Input parsed successfully"
                 miniAlertRect.color = Material.color(Material.Blue)
             }
+        }
+
+        function onSignalOutput(value) {
+            var component = Qt.createComponent("output.qml")
+            var win = component.createObject()
+            win.contentText = value
+            win.show()
         }
     }
 }

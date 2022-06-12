@@ -50,9 +50,7 @@ ApplicationWindow{
             text: qsTr("OK")
             anchors.right: parent.right
             anchors.rightMargin: 20
-            onClicked: {
-                window.close()
-            }
+            onClicked: window.close()
         }
     }
 }
