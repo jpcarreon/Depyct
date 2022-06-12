@@ -9,18 +9,21 @@ class MainWindow(QObject):
     def __init__(self):
         QObject.__init__(self)
 
-    signalPaste = Signal(bool)
     signalOutput = Signal(str)
+    signalError = Signal(str)
+    signalAlert = Signal(str)
     result = ""
 
     @Slot(str)
     def openFile(self, fileName):
         try:
             self.result += self.parseImg(fileName[8:])
-            self.signalPaste.emit(True)
+            self.signalAlert.emit("Input parsed successfully")
         except Exception as e:
             print(e)
-            self.signalPaste.emit(False)
+
+            self.signalError.emit("Failed to parse image")
+            self.signalAlert.emit("Error: Failed to parse image")
 
     @Slot()
     def getClipboard(self):
@@ -28,10 +31,12 @@ class MainWindow(QObject):
         try:
             ImageGrab.grabclipboard().save(tempPath, "PNG")
             self.result += self.parseImg(tempPath)
-            self.signalPaste.emit(True)
+            self.signalAlert.emit("Input parsed successfully")
         except Exception as e:
             print(e)
-            self.signalPaste.emit(False)
+
+            self.signalError.emit("Failed to parse image")
+            self.signalAlert.emit("Error: Failed to parse image")
             return
         
         os.remove(tempPath)

@@ -90,18 +90,20 @@ ApplicationWindow{
     Connections {
         target: backend
 
-        function onSignalPaste(value) {
-            if (!value) {
-                var component = Qt.createComponent("error.qml")
-                var win = component.createObject()
-                win.errorText += "Invalid Clipboard Contents!"
-                win.show()
-                miniAlertText.text = "Failed to parse"
+        function onSignalError(value) {
+            var component = Qt.createComponent("error.qml")
+            var win = component.createObject()
+            win.errorText += value
+            win.show()
+        }
+
+        function onSignalAlert(value) {
+            miniAlertText.text = value
+            
+            if (value.search("Error") >= 0)
                 miniAlertRect.color = "#ff0000"
-            } else {
-                miniAlertText.text = "Input parsed successfully"
+            else
                 miniAlertRect.color = Material.color(Material.Blue)
-            }
         }
 
         function onSignalOutput(value) {
